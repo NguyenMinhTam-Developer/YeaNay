@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "339176497980",
+    "project_id": "yeanay-9f09b",
+    "storage_bucket": "yeanay-9f09b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339176497980:android:f29ca0ae847c73da0ab439",
+        "android_client_info": {
+          "package_name": "app.yeanay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339176497980-anp2a45hkbgabc4h7vf3inkqfmo75gtm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.yeanay",
+            "certificate_hash": "a46bcccb86b543c87c8a0322637a80314d3781fd"
+          }
+        },
+        {
+          "client_id": "339176497980-s11kl02dhjthaisahi3spntt8j65i2e0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.yeanay",
+            "certificate_hash": "64c677e6f62b2a3e4809d4910c346be68000e1c5"
+          }
+        },
+        {
+          "client_id": "339176497980-soisig8t2eripilau5363huamuj60ors.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.yeanay",
+            "certificate_hash": "bf32c75fbc101e32787dda9318e2979f8aa64cae"
+          }
+        },
+        {
+          "client_id": "339176497980-rjd81dv3rip0bqk9i3i3dvtcr5vh154v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH6wRy3Ezemz0QqRbaCzana_uGZx_vLRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339176497980-rjd81dv3rip0bqk9i3i3dvtcr5vh154v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "339176497980-5ukujbqjc4tau1rbbbckcham5jatlrgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.yeanay"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

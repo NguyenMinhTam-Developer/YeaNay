@@ -1,0 +1,53 @@
+name: yea_nay
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+
+  # UI Support Packages
+  flutter_material_color_picker: ^1.1.0+2
+  cupertino_icons: ^1.0.2
+  flutter_svg: ^0.23.0+1
+  polls: ^1.0.1
+  flutter_form_builder: ^7.0.0                    # Build Form Components
+  form_builder_validators: ^7.0.0                 # Build Form validator
+  image_picker: ^0.8.4+3                          # Use to take picture from camera and gallery
+  flutter_staggered_grid_view: ^0.4.1             # Use to build Grid View
+  month_picker_dialog: ^0.4.0                     # Use to pick month and year
+  geolocator: ^7.7.1                              # User to get your location
+
+  # Authentication Support Packages
+  google_sign_in: ^5.2.1
+  flutter_facebook_auth: ^3.5.6
+  twitter_login: ^4.0.1
+  the_apple_sign_in: ^1.1.1
+
+  # Firebase Packages
+  cloud_firestore: ^3.1.0
+  firebase_auth: ^3.1.1
+  firebase_core: ^1.6.0
+  firebase_storage: ^10.1.0
+  firebase_dynamic_links: ^2.0.6
+
+  # State Management Support Packages
+  provider: ^5.0.0
+  get: ^4.3.8
+
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
