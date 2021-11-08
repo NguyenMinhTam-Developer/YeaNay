@@ -1,207 +1,219 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:polls/polls.dart';
+import 'package:get/get.dart';
+import 'package:yea_nay/view/empty_data_widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
-  double option1 = 2.0;
-  double option2 = 1.0;
-  double option3 = 4.0;
-  double option4 = 3.0;
-  String user = "user@gmail.com";
-  Map usersWhoVoted = {'test@gmail.com': 1, 'deny@gmail.com': 3, 'kent@gmail.com': 2, 'xyz@gmail.com': 3};
-  String creator = "admin@gmail.com";
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 32,
-            ),
-            Image.asset(
-              'assets/icons/yeanay.png',
-              width: 150,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            postWidget(context),
-            const SizedBox(
-              height: 10,
-            ),
-            postWidget(context),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    return Scaffold(
+      appBar: AppBar(),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('feeds').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> feedSnapshot) {
+          List<String> feeds = [];
 
-  // Widget votingCard(String text, Color color) {
-  //   return InkWell(
-  //     onTap: () {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //            builder: (context) => ViewPostPage(),),
-  //  );
-  //     },
-  //     child: Container(
-  //       width: MediaQuery.of(context).size.width,
-  //       height: 220,
-  //       padding: EdgeInsets.only(
-  //         top: 10,
-  //         bottom: 10,
-  //         left: 10,
-  //         right: 10,
-  //       ),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(5),
-  //         color: color,
-  //       ),
-  //       child: Center(
-  //           child: Text(
-  //         text,
-  //         style: TextStyle(
-  //           fontSize: 20,
-  //         ),
-  //       )),
-  //     ),
-  //   );
-  // }
+          if (feedSnapshot.data != null) {
+            for (var doc in feedSnapshot.data!.docs) {
+              feeds.add(doc.id);
+            }
 
-  Widget postWidget(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 10,
-        bottom: 10,
-        left: 10,
-        right: 10,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.grey.shade100,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage: AssetImage("assets/icons/Profile Image.png"),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Muhammad Talha Sultan',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text('1 day ago'),
-                ],
-              ),
-              const Spacer(),
-              SvgPicture.asset(
-                'assets/icons/menu.svg',
-                height: 25,
-              ),
-            ],
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 220,
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 10,
-              left: 10,
-              right: 10,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.green,
-            ),
-            child: const Center(
-                child: Text(
-              'Since we are in a long weekend which is thanksgiving so has anybody eaten turkey before??  Let me know fellas...',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            )),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Polls(
-                children: [
-                  // This cannot be less than 2, else will throw an exception
-                  Polls.options(title: 'Cairo', value: option1),
-                  Polls.options(title: 'Mecca', value: option2),
-                  Polls.options(title: 'Denmark', value: option3),
-                  Polls.options(title: 'Mogadishu', value: option4),
-                ],
-                question: const Text(
-                  '',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                currentUser: user,
-                creatorID: creator,
-                voteData: usersWhoVoted,
-                userChoice: usersWhoVoted[user],
-                onVoteBackgroundColor: Colors.blue,
-                leadingBackgroundColor: Colors.blue,
-                backgroundColor: Colors.white,
-                onVote: (choice) {
-                  setState(() {
-                    usersWhoVoted[user] = choice;
-                  });
-                  if (choice == 1) {
-                    setState(() {
-                      option1 += 1.0;
-                    });
-                  }
-                  if (choice == 2) {
-                    setState(() {
-                      option2 += 1.0;
-                    });
-                  }
-                  if (choice == 3) {
-                    setState(() {
-                      option3 += 1.0;
-                    });
-                  }
-                  if (choice == 4) {
-                    setState(() {
-                      option4 += 1.0;
-                    });
+            if (feeds.isNotEmpty) {
+              return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance.collection('posts').where('id', whereIn: feeds).snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> postSnapshot) {
+                  if (!postSnapshot.hasData && postSnapshot.data!.docs.isNotEmpty) {
+                    return const EmptyDataWidget(icon: Icons.clear, text: "You don't have any new feed");
+                  } else {
+                    if (postSnapshot.data != null && postSnapshot.data!.docs.isNotEmpty) {
+                      return ListView.separated(
+                        itemCount: postSnapshot.data?.docs.length ?? 0,
+                        padding: const EdgeInsets.all(16),
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(height: 16);
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          String? postId = postSnapshot.data?.docs[index].id;
+                          List<String> options = List<String>.from(postSnapshot.data?.docs[index]['options'].map((x) => x));
+
+                          return Card(
+                            margin: EdgeInsets.zero,
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                                    future: FirebaseFirestore.instance.collection('users').doc(postSnapshot.data?.docs[index]['user_id']).get(),
+                                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> userSnapshot) {
+                                      return ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        leading: Container(
+                                          height: 40,
+                                          width: 40,
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                                          child: userSnapshot.data?.data()?['profile_image'] != null
+                                              ? Image.network(
+                                                  userSnapshot.data!.data()!['profile_image'],
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : const Icon(Icons.person),
+                                        ),
+                                        title: Text(userSnapshot.data?.data()?['name'] ?? ''),
+                                      );
+                                    },
+                                  ),
+
+                                  const SizedBox(height: 16),
+
+                                  // Content
+                                  Container(
+                                    height: Get.width - 32,
+                                    width: Get.width - 32,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      color: Color(int.parse(postSnapshot.data?.docs[index]['background']['color'])),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        if (postSnapshot.data?.docs[index]['background']['background_image'] != null)
+                                          Positioned.fill(
+                                            child: Image.network(
+                                              postSnapshot.data?.docs[index]['background']['background_image'],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        if (postSnapshot.data?.docs[index]['content']['data'] != null)
+                                          Positioned.fill(
+                                            child: Container(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Center(
+                                                child: Text(
+                                                  postSnapshot.data?.docs[index]['content']['data'],
+                                                  textAlign: postSnapshot.data?.docs[index]['content']['align'] == TextAlign.left.toString()
+                                                      ? TextAlign.left
+                                                      : postSnapshot.data?.docs[index]['content']['align'] == TextAlign.center.toString()
+                                                          ? TextAlign.center
+                                                          : TextAlign.right,
+                                                  style: TextStyle(
+                                                    color: Color(int.parse(postSnapshot.data?.docs[index]['content']['color'])),
+                                                    fontSize: double.parse(postSnapshot.data?.docs[index]['content']['size']),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  const Divider(height: 32),
+
+                                  if (postId != null)
+                                    // Vote
+                                    StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                                      stream: FirebaseFirestore.instance.collection('posts').doc(postId).collection('votes').snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> voteSnapshot) {
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            ListView.separated(
+                                              shrinkWrap: true,
+                                              itemCount: options.length,
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              separatorBuilder: (BuildContext context, int index) {
+                                                return const SizedBox(height: 16);
+                                              },
+                                              itemBuilder: (BuildContext context, int index) {
+                                                int optionVotes = voteSnapshot.data!.docs.where((vote) => vote.data()['vote'] == options[index]).toList().length;
+
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    FirebaseFirestore.instance.collection('posts').doc(postId).collection('votes').doc(FirebaseAuth.instance.currentUser!.uid).set(
+                                                      {
+                                                        'vote': options[index],
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    clipBehavior: Clip.hardEdge,
+                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(36), border: Border.all(color: Colors.black)),
+                                                    child: Stack(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius: BorderRadius.circular(36),
+                                                          child: LinearProgressIndicator(
+                                                            minHeight: 36,
+                                                            backgroundColor: Colors.white,
+                                                            color: Colors.grey[400],
+                                                            value: (optionVotes / voteSnapshot.data!.docs.length),
+                                                          ),
+                                                        ),
+                                                        Positioned.fill(
+                                                          child: Center(
+                                                            child: Text("${options[index]} (${(optionVotes / voteSnapshot.data!.docs.length * 100).toStringAsFixed(0)}%)"),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const Divider(height: 32),
+                                            Row(
+                                              children: [
+                                                Expanded(child: Text("${voteSnapshot.data!.docs.length.toString()} Votes")),
+                                                const SizedBox(width: 8),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      FirebaseFirestore.instance.collection('posts').doc(postId).collection('votes').doc(FirebaseAuth.instance.currentUser!.uid).delete();
+                                                    },
+                                                    child: const Text("Clear")),
+                                                const SizedBox(width: 8),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('feeds').doc(postId).delete();
+                                                      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('my_votes').doc(postId).set({});
+                                                    },
+                                                    child: const Text("Submit")),
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    ),
+
+                                  // Votes
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const EmptyDataWidget(icon: Icons.clear, text: "You don't have any new feed");
+                    }
                   }
                 },
-              ),
-              const Text('50K Votes'),
-            ],
-          ),
-        ],
+              );
+            } else {
+              return const EmptyDataWidget(icon: Icons.clear, text: "You don't have any new feed");
+            }
+          } else {
+            return const EmptyDataWidget(icon: Icons.clear, text: "You don't have any new feed");
+          }
+        },
       ),
     );
   }

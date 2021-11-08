@@ -42,18 +42,11 @@ class _OpinionWidgetState extends State<OpinionWidget> {
     option2 = TextEditingController();
     option3 = TextEditingController();
     option4 = TextEditingController();
-
     titleNode = FocusNode();
   }
 
   @override
   void dispose() {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarColor: Colors.transparent,
-    //   statusBarIconBrightness: Brightness.dark,
-    //   systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-    //   systemNavigationBarDividerColor: Theme.of(context).scaffoldBackgroundColor,
-    // ));
     titleController.dispose();
     option1.dispose();
     option1.dispose();
@@ -62,48 +55,22 @@ class _OpinionWidgetState extends State<OpinionWidget> {
     super.dispose();
   }
 
-  _save() async {
-    if (isImageSelected || isTextAdded) {
-      const snackBar = SnackBar(
-          content: Text(
-        'Updating',
-        style: TextStyle(color: Colors.white, fontSize: 21),
-      ));
-      // _scaffoldKey.currentState.showSnackBar(snackBar);
-
-      // await FirebaseDBService().createCommunityPost(editPostModel);
-      Navigator.of(context).pop();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Create Post',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light),
+          backgroundColor: Colors.white,
+          title: const Text('Create Post'),
+          elevation: 0,
         ),
-        elevation: 0,
-        // actions: [
-        //   TextButton(
-        //       onPressed: () {},
-        //       child: Text(
-        //         'Save',
-        //         style: TextStyle(color: Colors.white),
-        //       ))
-        // ],
-      ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Column(
-          children: <Widget>[
+        body: Column(
+          children: [
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

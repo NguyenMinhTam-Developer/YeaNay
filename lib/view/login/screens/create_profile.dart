@@ -28,7 +28,7 @@ class CreateProfile extends StatefulWidget {
 class _CreateProfileState extends State<CreateProfile> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _dateOfBirthInputController = TextEditingController();
+  final TextEditingController _dateOfBirthInputController = TextEditingController();
 
   String? _displayName, _dateOfBirth, _email, _city, _state, _country;
 
@@ -145,7 +145,7 @@ class _CreateProfileState extends State<CreateProfile> {
                               _selectedImage = await showDialog<XFile?>(
                                 context: context,
                                 builder: (context) {
-                                  return const ImagePickerDialog();
+                                  return const ImagePickerDialog(title: "Pick your avatar from?");
                                 },
                               );
 

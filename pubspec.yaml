@@ -7,12 +7,13 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  polls: ^1.0.1                                   
 
   # UI Support Packages
   flutter_material_color_picker: ^1.1.0+2
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.23.0+1
-  polls: ^1.0.1
+  percent_indicator: ^3.4.0                       # Use to build vote
   flutter_form_builder: ^7.0.0                    # Build Form Components
   form_builder_validators: ^7.0.0                 # Build Form validator
   image_picker: ^0.8.4+3                          # Use to take picture from camera and gallery

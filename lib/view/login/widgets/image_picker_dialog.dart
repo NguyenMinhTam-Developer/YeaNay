@@ -5,14 +5,17 @@ import 'package:image_picker/image_picker.dart';
 class ImagePickerDialog extends StatelessWidget {
   const ImagePickerDialog({
     Key? key,
+    required this.title,
   }) : super(key: key);
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     final ImagePicker _picker = ImagePicker();
 
     return SimpleDialog(
-      title: const Text("Pick your avatar from?"),
+      title: Text(title),
       children: [
         SimpleDialogOption(
           padding: EdgeInsets.zero,
@@ -50,7 +53,13 @@ class ImagePickerDialog extends StatelessWidget {
 }
 
 class SimpleDialogItem extends StatelessWidget {
-  const SimpleDialogItem({required this.icon, required this.color, required this.text, required this.onPressed});
+  const SimpleDialogItem({
+    required this.icon,
+    required this.color,
+    required this.text,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   final IconData icon;
   final Color color;

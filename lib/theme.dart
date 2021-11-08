@@ -40,8 +40,8 @@ InputDecorationTheme inputDecorationTheme() {
 
 AppBarTheme appBarTheme() {
   return const AppBarTheme(
-    color: Colors.transparent,
-    elevation: 0,
+    color: Colors.white,
+    elevation: 1,
     iconTheme: IconThemeData(color: Colors.black),
     titleTextStyle: TextStyle(color: Color(0XFF8B8B8B), fontSize: 18),
   );
