@@ -166,7 +166,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
       await FirebaseFirestore.instance.collection('posts').add({
         'user_id': FirebaseAuth.instance.currentUser!.uid,
-        'content': {'question': _question, 'question_color': _textColor.toString(), 'question_text_align': _textAlign.toString()},
+        'content': {
+          'data': _question,
+          'color': _textColor.toString(),
+          'align': _textAlign.toString(),
+          "size": 20,
+        },
         'topics': _topics,
         'options': _options,
       }).then((postDoc) async {
@@ -175,7 +180,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             await FirebaseStorage.instance.ref('posts/${postDoc.id}-image.png').getDownloadURL().then((imageUrl) {
               FirebaseFirestore.instance.collection('posts').doc(postDoc.id).update({
                 'background': {
-                  'background_color': _backgroundColor.toString(),
+                  'color': _backgroundColor.toString(),
                   'background_image': imageUrl,
                 },
               });

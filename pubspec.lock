@@ -421,7 +421,7 @@ packages:
     source: hosted
     version: "0.2.1"
   percent_indicator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: percent_indicator
       url: "https://pub.dartlang.org"
