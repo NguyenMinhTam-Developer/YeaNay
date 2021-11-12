@@ -6,13 +6,23 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
-dependencies:
-  polls: ^1.0.1                                   
-
-  # UI Support Packages
-  flutter_material_color_picker: ^1.1.0+2
-  cupertino_icons: ^1.0.2
-  flutter_svg: ^0.23.0+1
+dependencies:                   
+  
+  # Authentication Support Packages
+  google_sign_in: ^5.2.1
+  flutter_facebook_auth: ^3.5.6
+  twitter_login: ^4.0.1
+  the_apple_sign_in: ^1.1.1
+  
+  # State Management Packages  
+  get: ^4.3.8
+  provider: ^5.0.0
+  
+  # Presentation Support Package
+  polls: ^1.0.1        
+  flutter_material_color_picker: ^1.1.0+2         # Use to create dialog to pick material color
+  cupertino_icons: ^1.0.2                         # Use Cupertino Icons
+  flutter_svg: ^0.23.0+1                          # Use Svg files
   percent_indicator: ^3.4.0                       # Use to build vote
   flutter_form_builder: ^7.0.0                    # Build Form Components
   form_builder_validators: ^7.0.0                 # Build Form validator
@@ -21,11 +31,13 @@ dependencies:
   month_picker_dialog: ^0.4.0                     # Use to pick month and year
   geolocator: ^7.7.1                              # User to get your location
 
-  # Authentication Support Packages
-  google_sign_in: ^5.2.1
-  flutter_facebook_auth: ^3.5.6
-  twitter_login: ^4.0.1
-  the_apple_sign_in: ^1.1.1
+  # Domain Support Packages
+  dartz: ^0.10.0
+
+  # Infrastructure Support Packages
+  logger: ^1.1.0
+  get_storage: ^2.0.3
+  internet_connection_checker: ^0.0.1+3
 
   # Firebase Packages
   cloud_firestore: ^3.1.0
@@ -33,10 +45,6 @@ dependencies:
   firebase_core: ^1.6.0
   firebase_storage: ^10.1.0
   firebase_dynamic_links: ^2.0.6
-
-  # State Management Support Packages
-  provider: ^5.0.0
-  get: ^4.3.8
 
   flutter:
     sdk: flutter
