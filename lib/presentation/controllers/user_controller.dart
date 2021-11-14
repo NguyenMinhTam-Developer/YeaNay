@@ -33,7 +33,9 @@ class UserController extends GetxController {
 
     return result.fold(
       (failure) => null,
-      (success) => success.data,
+      (success) {
+        return success.data;
+      },
     );
   }
 

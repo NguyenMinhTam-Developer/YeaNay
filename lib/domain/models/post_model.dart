@@ -1,3 +1,5 @@
+import 'package:yea_nay/domain/models/vote_model.dart';
+
 class PostModel {
   PostModel({
     required this.id,
@@ -14,19 +16,20 @@ class PostModel {
   PostBackground? background;
   List<String?>? topics;
   List<String?>? options;
+  List<VoteModel?>? votes;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
-        owner: json["owner"],
-        content: PostContent.fromJson(json["content"]),
-        background: PostBackground.fromJson(json["background"]),
-        topics: List<String>.from(json["topics"].map((x) => x)),
-        options: List<String>.from(json["options"].map((x) => x)),
+        owner: json["user_id"],
+        content: json["content"] != null ? PostContent.fromJson(json["content"]) : null,
+        background: json["background"] != null ? PostBackground.fromJson(json["background"]) : null,
+        topics: json["topics"] != null ? List<String>.from(json["topics"].map((x) => x)) : null,
+        options: json["options"] != null ? List<String>.from(json["options"].map((x) => x)) : null,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "owner": owner,
+        "user_id": owner,
         "content": content?.toJson(),
         "background": background?.toJson(),
         "topics": topics != null ? List<String>.from((topics!).map((x) => x)) : null,
@@ -36,26 +39,26 @@ class PostModel {
 
 class PostContent {
   PostContent({
-    required this.value,
+    required this.data,
     required this.align,
     required this.color,
     required this.size,
   });
 
-  String? value;
+  String? data;
   String? align;
   String? color;
   int? size;
 
   factory PostContent.fromJson(Map<String, dynamic> json) => PostContent(
-        value: json["value"],
+        data: json["data"],
         align: json["align"],
         color: json["color"],
         size: json["size"],
       );
 
   Map<String, dynamic> toJson() => {
-        "value": value,
+        "data": data,
         "align": align,
         "color": color,
         "size": size,

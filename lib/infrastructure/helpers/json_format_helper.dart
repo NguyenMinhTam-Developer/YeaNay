@@ -6,7 +6,7 @@ class JsonFormatHelper {
 
     if (value is int || value is double || value is num) {
       try {
-        return value.value.toInt();
+        return value.data.toInt();
       } on FormatException {
         return 0;
       }
@@ -26,7 +26,7 @@ class JsonFormatHelper {
 
     if (value is int || value is double || value is num) {
       try {
-        return value.value.toDouble();
+        return value.data.toDouble();
       } on FormatException {
         return 0;
       }

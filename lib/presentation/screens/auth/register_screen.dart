@@ -34,12 +34,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   XFile? _selectedImage;
 
-  FocusNode? _displayNameNode;
-  FocusNode? _dateOfBirthNode;
-  FocusNode? _emailNode;
-  FocusNode? _cityNode;
-  FocusNode? _stateNode;
-  FocusNode? _countryNode;
+  // FocusNode? _displayNameNode;
+  // FocusNode? _dateOfBirthNode;
+  // FocusNode? _emailNode;
+  // FocusNode? _cityNode;
+  // FocusNode? _stateNode;
+  // FocusNode? _countryNode;
 
   @override
   void initState() {
@@ -48,24 +48,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _displayName = widget.displayName;
     _email = widget.email;
 
-    _displayNameNode = FocusNode();
-    _dateOfBirthNode = FocusNode();
-    _emailNode = FocusNode();
-    _cityNode = FocusNode();
-    _stateNode = FocusNode();
-    _countryNode = FocusNode();
+    // _displayNameNode = FocusNode();
+    // _dateOfBirthNode = FocusNode();
+    // _emailNode = FocusNode();
+    // _cityNode = FocusNode();
+    // _stateNode = FocusNode();
+    // _countryNode = FocusNode();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _displayNameNode!.dispose();
-    _dateOfBirthNode!.dispose();
-    _emailNode!.dispose();
-    _cityNode!.dispose();
-    _stateNode!.dispose();
-    _countryNode!.dispose();
+    // _displayNameNode!.dispose();
+    // _dateOfBirthNode!.dispose();
+    // _emailNode!.dispose();
+    // _cityNode!.dispose();
+    // _stateNode!.dispose();
+    // _countryNode!.dispose();
   }
 
   @override
@@ -166,7 +166,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               FormBuilderTextField(
                 name: 'display_name',
                 onChanged: (value) => _displayName = value,
-                onEditingComplete: () => _dateOfBirthNode!.requestFocus(),
                 initialValue: _displayName,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
@@ -182,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onTap: () => showMonthPicker(
                   context: context,
                   firstDate: DateTime(DateTime.now().year - 100, 5),
-                  lastDate: DateTime(DateTime.now().year, DateTime.now().month),
+                  lastDate: DateTime(DateTime.now().year - 16, DateTime.now().month, DateTime.now().day),
                   initialDate: DateTime.now(),
                 ).then((date) {
                   if (date != null) {
@@ -195,10 +194,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: IgnorePointer(
                   child: FormBuilderTextField(
                     name: 'date_of_birth',
-                    focusNode: _dateOfBirthNode,
                     controller: _dateOfBirthInputController,
                     onChanged: (value) => _dateOfBirth = value.toString(),
-                    onEditingComplete: () => _emailNode!.requestFocus(),
                     textInputAction: TextInputAction.next,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context),
@@ -215,9 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'email',
-                focusNode: _emailNode,
                 onChanged: (value) => _email = value,
-                onEditingComplete: () => _cityNode!.requestFocus(),
                 initialValue: _email,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
@@ -234,9 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'city',
-                focusNode: _cityNode,
                 onChanged: (value) => _city = value,
-                onEditingComplete: () => _stateNode!.requestFocus(),
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -249,9 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'state',
-                focusNode: _stateNode,
                 onChanged: (value) => _state = value,
-                onEditingComplete: () => _countryNode!.requestFocus(),
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -264,7 +255,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'country',
-                focusNode: _countryNode,
                 onChanged: (value) => _country = value,
                 textInputAction: TextInputAction.done,
                 validator: FormBuilderValidators.compose([

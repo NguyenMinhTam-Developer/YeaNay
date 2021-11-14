@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../domain/core/alert.dart';
@@ -14,6 +16,7 @@ class PostController extends GetxController {
   final isLoading = false.obs;
 
   List<PostModel> postList = [];
+  List<PostModel> userVotedPost = [];
 
   Future<PostModel?> createPost(PostModel post) async {
     EventHelper.openLoadingDialog();
@@ -31,14 +34,14 @@ class PostController extends GetxController {
     });
   }
 
-  Future<PostModel?> getPost({String? id}) async {
+  Future<PostModel?> getPost({String? id, List<String>? ids}) async {
     if (id == null) {
       isLoading.value = true;
     } else {
       EventHelper.openLoadingDialog();
     }
 
-    Either<Failure, Success<Either<List<PostModel>, PostModel>>> result = await _repo.getPost(id: id);
+    Either<Failure, Success<Either<List<PostModel>, PostModel>>> result = await _repo.getPost(id: id, ids: ids);
 
     if (id == null) {
       isLoading.value = false;
@@ -52,11 +55,28 @@ class PostController extends GetxController {
       Either<List<PostModel>, PostModel> result = success.data;
 
       result.fold((postList) {
-        this.postList = postList;
+        if (ids != null) {
+          userVotedPost = postList;
+        } else {
+          this.postList = postList;
+        }
+
         update();
       }, (post) {
         return post;
       });
+    });
+  }
+
+  Future<List<PostModel>> getUserPostList() async {
+    return FirebaseFirestore.instance.collection('posts').where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get().then((postDocList) {
+      List<PostModel> postList = [];
+
+      for (var post in postDocList.docs) {
+        postList.add(PostModel.fromJson(post.data()));
+      }
+
+      return postList;
     });
   }
 

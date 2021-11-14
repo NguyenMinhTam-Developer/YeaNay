@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,12 +11,18 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twitter_login/twitter_login.dart';
+import 'package:yea_nay/domain/models/user_model.dart';
+import 'package:yea_nay/presentation/screens/auth/login_screen.dart';
 
 import '../layouts/event_helper.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/main_page.dart';
 
 class AuthController extends GetxController {
+  var isAnonymous = false.obs;
+
+  UserModel? currentUser;
+
   signInWithGoogle() async {
     print("Auth Controller - Google Sign In: Sign in with Google");
     EventHelper.openLoadingDialog();
@@ -37,7 +45,7 @@ class AuthController extends GetxController {
       FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get().then((userDoc) {
         if (userDoc.exists) {
           EventHelper.closeLoadingDialog();
-          Get.offAll(() => const MainPage());
+          Get.offAll(() => const MainScreen());
         } else {
           EventHelper.closeLoadingDialog();
           Get.to(
@@ -69,7 +77,7 @@ class AuthController extends GetxController {
       FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get().then((userDoc) {
         if (userDoc.exists) {
           EventHelper.closeLoadingDialog();
-          Get.offAll(() => const MainPage());
+          Get.offAll(() => const MainScreen());
         } else {
           EventHelper.closeLoadingDialog();
           Get.to(
@@ -107,7 +115,7 @@ class AuthController extends GetxController {
       FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get().then((userDoc) {
         if (userDoc.exists) {
           EventHelper.closeLoadingDialog();
-          Get.offAll(() => const MainPage());
+          Get.offAll(() => const MainScreen());
         } else {
           EventHelper.closeLoadingDialog();
           Get.to(
@@ -126,6 +134,29 @@ class AuthController extends GetxController {
 
   signInWithApple() async {
     //
+  }
+
+  signInAnonymously() async {
+    try {
+      EventHelper.openLoadingDialog();
+      FirebaseAuth.instance.signInAnonymously().then((value) {
+        EventHelper.closeLoadingDialog();
+        Get.offAllNamed(MainScreen.routeName);
+      });
+    } catch (e) {
+      EventHelper.closeLoadingDialog();
+      EventHelper.openSnackBar(
+        title: "Failed",
+        message: "Failed to login in with guest",
+        type: AlertType.danger,
+      );
+    }
+  }
+
+  signOut() async {
+    FirebaseAuth.instance.signOut().then(
+          (value) => Get.offAllNamed(LoginScreen.routeName),
+        );
   }
 
   Future<void> createProfile({
@@ -169,7 +200,7 @@ class AuthController extends GetxController {
                     "country": country,
                     "area_of_interest": topics,
                     "location": userLocation,
-                  }).then((value) => Get.to(() => const MainPage()));
+                  }).then((value) => Get.to(() => const MainScreen()));
                 });
               });
             } on FirebaseException catch (e) {
@@ -188,7 +219,7 @@ class AuthController extends GetxController {
               "country": country,
               "area_of_interest": topics,
               "location": userLocation,
-            }).then((value) => Get.offAll(() => const MainPage()));
+            }).then((value) => Get.offAll(() => const MainScreen()));
           }
         });
       } else {
@@ -214,7 +245,7 @@ class AuthController extends GetxController {
                   "country": country,
                   "area_of_interest": topics,
                   "location": userLocation,
-                }).then((value) => Get.offAll(() => const MainPage()));
+                }).then((value) => Get.offAll(() => const MainScreen()));
               });
             });
           } on FirebaseException catch (e) {
@@ -233,10 +264,25 @@ class AuthController extends GetxController {
             "country": country,
             "area_of_interest": topics,
             "location": userLocation,
-          }).then((value) => Get.offAll(() => const MainPage()));
+          }).then((value) => Get.offAll(() => const MainScreen()));
         }
       }
     });
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    isAnonymous.value = FirebaseAuth.instance.currentUser?.isAnonymous ?? true;
+
+    if (!isAnonymous.value) {
+      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get().then((userDoc) {
+        currentUser = UserModel.fromJson(userDoc.data()!);
+      });
+    }
+
+    print("User is Anonymous: ${isAnonymous.value}");
   }
 }
 

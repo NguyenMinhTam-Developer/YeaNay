@@ -28,7 +28,7 @@ class PostRepoImpl implements PostRepo {
   Future<Either<Failure, Success<Either<List<PostModel>, PostModel>>>> getPost({String? id, List<String>? ids}) async {
     if (await NetworkConnection.isConnected) {
       try {
-        return Right(await _api.getPost(id: id));
+        return Right(await _api.getPost(id: id, ids: ids));
       } on ServerException {
         return Left(ServerFailure());
       }

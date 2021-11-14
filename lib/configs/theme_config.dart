@@ -41,7 +41,9 @@ class ThemeConfig {
   // App Bar Theme
   static const _appBarTheme = AppBarTheme(
     centerTitle: true,
+    elevation: 1,
     color: Colors.white,
+    foregroundColor: Colors.black,
   );
 
   // Button Theme

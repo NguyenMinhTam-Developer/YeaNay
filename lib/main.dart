@@ -1,15 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'presentation/screens/main_page.dart';
+import 'package:yea_nay/presentation/screens/splash/splash_screen.dart';
 
 import 'configs/app_config.dart';
 import 'configs/theme_config.dart';
 import 'presentation/routes/page.route.dart';
-import 'presentation/screens/auth/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +33,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeConfig.darkTheme,
       debugShowCheckedModeBanner: false,
       getPages: RoutePage.pages,
-      initialRoute: FirebaseAuth.instance.currentUser == null ? LoginScreen.routeName : LoginScreen.routeName,
+      initialRoute: SplashScreen.routeName,
       supportedLocales: const [
         Locale('en'),
       ],

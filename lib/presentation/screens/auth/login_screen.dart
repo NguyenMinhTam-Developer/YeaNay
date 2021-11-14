@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/auth_controller.dart';
-import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -65,13 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const RegisterScreen();
-                    },
-                  ),
-                );
+                _authController.signInAnonymously();
               },
               child: const Text(
                 'Guest Login',

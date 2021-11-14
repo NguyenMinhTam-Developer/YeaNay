@@ -26,7 +26,7 @@ class UserCollection {
     }
   }
 
-  Future<Success<UserModel>> getUser(String? id) async {
+  Future<Success<UserModel>> getUser(String id) async {
     try {
       return _colection.doc(id).get().then((document) {
         if (document.exists && document.data() != null) {
