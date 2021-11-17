@@ -20,7 +20,7 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
-        owner: json["user_id"],
+        owner: json["owner"],
         content: json["content"] != null ? PostContent.fromJson(json["content"]) : null,
         background: json["background"] != null ? PostBackground.fromJson(json["background"]) : null,
         topics: json["topics"] != null ? List<String>.from(json["topics"].map((x) => x)) : null,
@@ -29,7 +29,7 @@ class PostModel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "user_id": owner,
+        "owner": owner,
         "content": content?.toJson(),
         "background": background?.toJson(),
         "topics": topics != null ? List<String>.from((topics!).map((x) => x)) : null,

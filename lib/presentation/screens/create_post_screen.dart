@@ -8,9 +8,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:yea_nay/domain/core/alert.dart';
 import 'package:yea_nay/presentation/controllers/auth_controller.dart';
+import 'package:yea_nay/presentation/helpers/event_helper.dart';
 import 'package:yea_nay/presentation/widgets/empty_data_widget.dart';
-import '../layouts/event_helper.dart';
 import '../widgets/image_picker_dialog.dart';
 import '../widgets/topic_picker_dialog.dart';
 import 'option_input_widget.dart';
@@ -30,10 +31,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final _formKey = GlobalKey<FormState>();
   final PageController _postFormatOptionsController = PageController();
 
+  final TextEditingController _questionController = TextEditingController();
+
   XFile? _selectedImage;
   String? _question;
 
-  final List<String> _options = [
+  List<String> _options = [
     '',
     '',
   ];
@@ -143,7 +146,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       context: context,
       builder: (_) {
         return TopicPickerDialog(
-          topics: _topics!,
+          topics: _topics ?? [],
         );
       },
     );
@@ -154,8 +157,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   _createPost() async {
     FocusScope.of(context).requestFocus(FocusNode());
 
-    if (_question?.isEmpty ?? true) {
+    if (_questionController.text.isEmpty) {
       EventHelper.openSnackBar(title: "Missing field", message: "Post need a question", type: AlertType.warning);
+      return;
+    } else if (_topics?.isEmpty ?? true) {
+      EventHelper.openSnackBar(title: "No Tag", message: "Please select atleast 1 tag for the post", type: AlertType.warning);
       return;
     }
 
@@ -173,7 +179,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       await FirebaseFirestore.instance.collection('posts').add({}).then((postDocument) {
         FirebaseFirestore.instance.collection('posts').doc(postDocument.id).update({
           'id': postDocument.id,
-          'user_id': FirebaseAuth.instance.currentUser!.uid,
+          'owner': FirebaseAuth.instance.currentUser!.uid,
           'content': {
             'data': _question,
             'color': _textColor.toString(),
@@ -203,9 +209,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         }).then((value) {
           FirebaseFirestore.instance.collection('users').where('area_of_interest', arrayContainsAny: _topics).get().then((userDocutmentList) {
             for (var userDocument in userDocutmentList.docs) {
-              FirebaseFirestore.instance.collection('users').doc(userDocument.id).collection('feeds').doc(postDocument.id);
+              FirebaseFirestore.instance.collection('users').doc(userDocument.id).collection('feeds').doc(postDocument.id).set({});
             }
           });
+
+          setState(() {
+            _question = '';
+
+            _questionController.clear();
+            _options.clear();
+
+            _options = [
+              '',
+              '',
+            ];
+          });
+
+          if (Get.currentRoute == CreatePostScreen.routeName) {
+            Get.back();
+            EventHelper.openSnackBar(title: "Success", message: "Successfully create new Post", type: AlertType.success);
+          }
         });
       });
     }
@@ -258,6 +281,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     child: FormBuilderTextField(
                                       cursorColor: Colors.black,
                                       textAlign: _textAlign,
+                                      controller: _questionController,
                                       maxLength: 140,
                                       maxLines: null,
                                       style: TextStyle(color: _textColor),

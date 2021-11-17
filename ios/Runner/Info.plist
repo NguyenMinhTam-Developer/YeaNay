@@ -49,5 +49,8 @@
 
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
+	
+	<key>io.flutter.embedded_views_preview</key>
+	<string>Use webview to view policy information</string>
 </dict>
 </plist>

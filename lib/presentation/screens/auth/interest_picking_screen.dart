@@ -3,26 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../controllers/auth_controller.dart';
-import '../widgets/empty_data_widget.dart';
-import '../layouts/event_helper.dart';
+import 'package:yea_nay/domain/core/alert.dart';
+import 'package:yea_nay/domain/models/user_model.dart';
+import 'package:yea_nay/presentation/helpers/event_helper.dart';
+import '../../controllers/auth_controller.dart';
+import '../../widgets/empty_data_widget.dart';
 
 class InterestPickingScreen extends StatefulWidget {
   const InterestPickingScreen({
     Key? key,
-    required this.displayName,
-    required this.dateOfBirth,
-    required this.email,
-    required this.city,
-    required this.state,
-    required this.country,
-    this.avatarUrl,
-    this.selectedImage,
+    required this.user,
+    this.file,
   }) : super(key: key);
 
-  final String displayName, dateOfBirth, email, city, state, country;
-  final String? avatarUrl;
-  final XFile? selectedImage;
+  final UserModel user;
+  final XFile? file;
 
   @override
   _InterestPickingScreenState createState() => _InterestPickingScreenState();
@@ -31,7 +26,7 @@ class InterestPickingScreen extends StatefulWidget {
 class _InterestPickingScreenState extends State<InterestPickingScreen> {
   final AuthController _authController = Get.find();
 
-  List<String> selectedTopics = [];
+  final List<String> _areaOfInterest = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +58,10 @@ class _InterestPickingScreenState extends State<InterestPickingScreen> {
                     margin: EdgeInsets.zero,
                     child: InkWell(
                       onTap: () => setState(() {
-                        if (!selectedTopics.contains(snapshot.data?.docs[index]['name'])) {
-                          selectedTopics.add(snapshot.data?.docs[index]['name']);
+                        if (!_areaOfInterest.contains(snapshot.data?.docs[index]['name'])) {
+                          _areaOfInterest.add(snapshot.data?.docs[index]['name']);
                         } else {
-                          selectedTopics.remove(snapshot.data?.docs[index]['name']);
+                          _areaOfInterest.remove(snapshot.data?.docs[index]['name']);
                         }
                       }),
                       child: Stack(
@@ -89,7 +84,7 @@ class _InterestPickingScreenState extends State<InterestPickingScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
-                                selectedTopics.contains(snapshot.data?.docs[index]['name']) ? Icons.check_circle : Icons.radio_button_unchecked,
+                                _areaOfInterest.contains(snapshot.data?.docs[index]['name']) ? Icons.check_circle : Icons.radio_button_unchecked,
                                 size: 20,
                                 color: Get.theme.primaryColor,
                               ),
@@ -109,19 +104,13 @@ class _InterestPickingScreenState extends State<InterestPickingScreen> {
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (selectedTopics.length < 3) {
+                    if (_areaOfInterest.length < 3) {
                       EventHelper.openSnackBar(title: "Requirement", message: "Please select atleast 3 topics", type: AlertType.info);
                     } else {
                       _authController.createProfile(
-                        displayName: widget.displayName,
-                        dateOfBirth: widget.dateOfBirth,
-                        email: widget.email,
-                        city: widget.city,
-                        state: widget.state,
-                        country: widget.country,
-                        topics: selectedTopics,
-                        avatarUrl: widget.avatarUrl,
-                        selectedImage: widget.selectedImage,
+                        widget.user,
+                        _areaOfInterest,
+                        widget.file,
                       );
                     }
                   },

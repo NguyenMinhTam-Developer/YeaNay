@@ -5,9 +5,9 @@ import 'package:yea_nay/presentation/controllers/auth_controller.dart';
 import 'package:yea_nay/presentation/screens/my_post_screen.dart';
 
 import 'create_post_screen.dart';
-import 'home_page.dart';
+import 'home/home_screen.dart';
 import 'my_vote_screen.dart';
-import 'profile_page.dart';
+import 'profile/profile_page.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routeName = '/main';
@@ -39,12 +39,6 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: SafeArea(child: _widgetOptions.elementAt(_currentIndex)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(CreatePostScreen.routeName),
-        backgroundColor: Get.theme.colorScheme.primary,
-        foregroundColor: Get.theme.colorScheme.onPrimary,
-        child: const Icon(Icons.add_circle_outline_sharp),
-      ),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 10,
         shape: const CircularNotchedRectangle(),
@@ -59,18 +53,11 @@ class _MainScreenState extends State<MainScreen> {
               ),
               IconButton(
                 onPressed: () => _onBottomNavigationTap(1),
-                icon: Icon(Icons.favorite_rounded, color: _getIconColor(1)),
-              ),
-              const IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.more,
-                  color: Colors.transparent,
-                ),
+                icon: Icon(Icons.article_rounded, color: _getIconColor(1)),
               ),
               IconButton(
                 onPressed: () => _onBottomNavigationTap(2),
-                icon: Icon(Icons.receipt_long_rounded, color: _getIconColor(2)),
+                icon: Icon(Icons.thumb_up_alt_rounded, color: _getIconColor(2)),
               ),
               IconButton(
                 onPressed: () => Get.to(() => const ProfileScreen()),

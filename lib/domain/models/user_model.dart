@@ -11,17 +11,19 @@ class UserModel {
     required this.state,
     required this.city,
     required this.country,
+    required this.areaOfInterest,
   });
 
   String? id;
   String? avatar;
   String? name;
   String? email;
-  String? dob;
+  Timestamp? dob;
   GeoPoint? location;
   String? state;
   String? city;
   String? country;
+  List<dynamic> areaOfInterest;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
@@ -33,6 +35,7 @@ class UserModel {
         state: json["state"],
         city: json["city"],
         country: json["country"],
+        areaOfInterest: json["area_of_interest"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +48,6 @@ class UserModel {
         "state": state,
         "city": city,
         "country": country,
+        "area_of_interest": areaOfInterest,
       };
 }

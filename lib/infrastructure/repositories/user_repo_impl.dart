@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../domain/core/exception.dart';
 import '../../domain/core/failure.dart';
@@ -12,10 +13,10 @@ class UserRepoImpl implements UserRepo {
   final UserCollection _collection = UserCollection();
 
   @override
-  Future<Either<Failure, Success<UserModel>>> createUser(UserModel model) async {
+  Future<Either<Failure, Success<UserModel>>> createUser(UserModel model, List<String> areaOfInterest, XFile? file) async {
     if (await NetworkConnection.isConnected) {
       try {
-        return Right(await _collection.createUser(model));
+        return Right(await _collection.createUser(model, areaOfInterest, file));
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -38,10 +39,10 @@ class UserRepoImpl implements UserRepo {
   }
 
   @override
-  Future<Either<Failure, Success<UserModel>>> updateUser(UserModel model) async {
+  Future<Either<Failure, Success<UserModel>>> updateUser(UserModel model, XFile? file) async {
     if (await NetworkConnection.isConnected) {
       try {
-        return Right(await _collection.updateUser(model));
+        return Right(await _collection.updateUser(model, file));
       } on ServerException {
         return Left(ServerFailure());
       }

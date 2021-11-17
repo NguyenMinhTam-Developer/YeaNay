@@ -61,8 +61,6 @@ class PostCollection {
             postList.add(PostModel.fromJson(post.data()));
           }
 
-          print("Got ${postList.length}");
-
           return Success(
             data: Left(postList),
           );

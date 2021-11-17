@@ -63,7 +63,7 @@ class ThemeConfig {
   // Input Decoration Theme
   static final _inputDecoration = InputDecorationTheme(
     floatingLabelBehavior: FloatingLabelBehavior.always,
-    contentPadding: const EdgeInsets.symmetric(horizontal: SizeConfig.padding, vertical: SizeConfig.padding / 2),
+    contentPadding: const EdgeInsets.symmetric(horizontal: SizeConfig.padding * 1.5, vertical: SizeConfig.padding / 2),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(SizeConfig.borderRadius),
       gapPadding: 10,

@@ -68,8 +68,40 @@ class PostController extends GetxController {
     });
   }
 
+  Future<List<PostModel>> getUserFeedsList() async {
+    return FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('feeds').get().then((docList) {
+      List<String> feeds = [];
+
+      for (var doc in docList.docs) {
+        feeds.add(doc.id);
+      }
+
+      if (feeds.isNotEmpty) {
+        return FirebaseFirestore.instance.collection('posts').where('id', whereIn: feeds).get().then((postDocList) {
+          List<PostModel> postList = [];
+
+          for (var post in postDocList.docs) {
+            postList.add(PostModel.fromJson(post.data()));
+          }
+
+          this.postList = postList;
+
+          update();
+
+          return this.postList;
+        });
+      } else {
+        postList.clear();
+
+        update();
+
+        return postList;
+      }
+    });
+  }
+
   Future<List<PostModel>> getUserPostList() async {
-    return FirebaseFirestore.instance.collection('posts').where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get().then((postDocList) {
+    return FirebaseFirestore.instance.collection('posts').where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get().then((postDocList) {
       List<PostModel> postList = [];
 
       for (var post in postDocList.docs) {
@@ -80,10 +112,26 @@ class PostController extends GetxController {
     });
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getPost();
+  Future<List<PostModel>> getUserVotedList() async {
+    return FirebaseFirestore.instance.collection('votes').where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get().then((voteDocList) {
+      List<String> postIds = [];
+
+      for (var voteDoc in voteDocList.docs) {
+        if (voteDoc.data()['post_id'] != null) {
+          postIds.add(voteDoc.data()['post_id']);
+        }
+      }
+
+      return FirebaseFirestore.instance.collection('posts').where('id', whereIn: postIds).get().then((postDocList) {
+        List<PostModel> postList = [];
+
+        for (var post in postDocList.docs) {
+          postList.add(PostModel.fromJson(post.data()));
+        }
+
+        return postList;
+      });
+    });
   }
 }
 

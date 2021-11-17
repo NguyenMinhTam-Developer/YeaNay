@@ -15,11 +15,11 @@ class Failure {
 class ServerFailure extends Failure {
   ServerFailure({
     String title = "Server Failure",
-    String message = "There has been a problem with the server, please try again!",
+    String? message,
     AlertType type = AlertType.danger,
   }) : super(
           title: title,
-          message: message,
+          message: message ?? "There has been a problem with the server, please try again!",
           type: type,
         );
 }

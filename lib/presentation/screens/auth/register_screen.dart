@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,19 +8,18 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
-import '../interest_picking_screen.dart';
+import 'package:yea_nay/domain/models/user_model.dart';
+import 'interest_picking_screen.dart';
 import '../../widgets/image_picker_dialog.dart';
 import 'package:intl/intl.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
     Key? key,
-    this.avatarUrl,
-    this.displayName,
-    this.email,
+    required this.user,
   }) : super(key: key);
 
-  final String? avatarUrl, displayName, email;
+  final UserModel user;
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -29,43 +29,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _dateOfBirthInputController = TextEditingController();
+  XFile? _file;
 
-  String? _displayName, _dateOfBirth, _email, _city, _state, _country;
-
-  XFile? _selectedImage;
-
-  // FocusNode? _displayNameNode;
-  // FocusNode? _dateOfBirthNode;
-  // FocusNode? _emailNode;
-  // FocusNode? _cityNode;
-  // FocusNode? _stateNode;
-  // FocusNode? _countryNode;
+  late UserModel _user;
 
   @override
   void initState() {
     super.initState();
-
-    _displayName = widget.displayName;
-    _email = widget.email;
-
-    // _displayNameNode = FocusNode();
-    // _dateOfBirthNode = FocusNode();
-    // _emailNode = FocusNode();
-    // _cityNode = FocusNode();
-    // _stateNode = FocusNode();
-    // _countryNode = FocusNode();
+    _user = widget.user;
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    // _displayNameNode!.dispose();
-    // _dateOfBirthNode!.dispose();
-    // _emailNode!.dispose();
-    // _cityNode!.dispose();
-    // _stateNode!.dispose();
-    // _countryNode!.dispose();
   }
 
   @override
@@ -104,14 +80,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Container(
                           clipBehavior: Clip.hardEdge,
                           decoration: const BoxDecoration(shape: BoxShape.circle),
-                          child: _selectedImage != null
+                          child: _file != null
                               ? Image.file(
-                                  File(_selectedImage!.path),
+                                  File(_file!.path),
                                   fit: BoxFit.cover,
                                 )
-                              : widget.avatarUrl != null
+                              : widget.user.avatar != null
                                   ? Image.network(
-                                      widget.avatarUrl!,
+                                      widget.user.avatar!,
                                       fit: BoxFit.cover,
                                       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                                         return Image.asset(
@@ -142,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               backgroundColor: const Color(0xFFF5F6F9),
                             ),
                             onPressed: () async {
-                              _selectedImage = await showDialog<XFile?>(
+                              _file = await showDialog<XFile?>(
                                 context: context,
                                 builder: (context) {
                                   return const ImagePickerDialog(title: "Pick your avatar from?");
@@ -165,8 +141,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'display_name',
-                onChanged: (value) => _displayName = value,
-                initialValue: _displayName,
+                onChanged: (value) => _user.name = value,
+                initialValue: _user.name,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -186,8 +162,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ).then((date) {
                   if (date != null) {
                     setState(() {
-                      _dateOfBirth = DateFormat('MMMM, yyyy').format(date);
-                      _dateOfBirthInputController.text = _dateOfBirth ?? '';
+                      _user.dob = Timestamp.fromDate(date);
+                      _dateOfBirthInputController.text = DateFormat('MMMM, yyyy').format(date);
                     });
                   }
                 }),
@@ -195,7 +171,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: FormBuilderTextField(
                     name: 'date_of_birth',
                     controller: _dateOfBirthInputController,
-                    onChanged: (value) => _dateOfBirth = value.toString(),
                     textInputAction: TextInputAction.next,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context),
@@ -212,8 +187,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'email',
-                onChanged: (value) => _email = value,
-                initialValue: _email,
+                onChanged: (value) => _user.email = value,
+                initialValue: _user.email,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -229,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'city',
-                onChanged: (value) => _city = value,
+                onChanged: (value) => _user.city = value,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -242,7 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'state',
-                onChanged: (value) => _state = value,
+                onChanged: (value) => _user.state = value,
                 textInputAction: TextInputAction.next,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -255,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               FormBuilderTextField(
                 name: 'country',
-                onChanged: (value) => _country = value,
+                onChanged: (value) => _user.country = value,
                 textInputAction: TextInputAction.done,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(context),
@@ -274,14 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     _formKey.currentState!.save();
 
                     Get.to(() => InterestPickingScreen(
-                          displayName: _displayName!,
-                          dateOfBirth: _dateOfBirth!,
-                          email: _email!,
-                          city: _city!,
-                          state: _state!,
-                          country: _country!,
-                          avatarUrl: widget.avatarUrl,
-                          selectedImage: _selectedImage,
+                          user: widget.user,
+                          file: _file,
                         ));
                   }
                 },

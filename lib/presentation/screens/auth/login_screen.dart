@@ -43,19 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(width: 16),
                 SocialMediaButton(
-                  onTap: () {
-                    _authController.signInWithFacebook();
-                  },
+                  onTap: () {},
                   svgPath: 'assets/icons/facebook.svg',
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                SocialMediaButton(
-                  onTap: () {
-                    _authController.signInWithTwitter();
-                  },
-                  svgPath: 'assets/icons/twitter_icon.svg',
                 ),
               ],
             ),

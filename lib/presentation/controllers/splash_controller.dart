@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:yea_nay/presentation/screens/auth/login_screen.dart';
-import 'package:yea_nay/presentation/screens/main_page.dart';
+import 'package:yea_nay/presentation/screens/main_screen.dart';
 
 class SplashController extends GetxController {
   @override

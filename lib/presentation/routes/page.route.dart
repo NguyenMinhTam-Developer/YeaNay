@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 import 'package:yea_nay/presentation/controllers/main_controller.dart';
 import 'package:yea_nay/presentation/controllers/splash_controller.dart';
 import 'package:yea_nay/presentation/screens/create_post_screen.dart';
+import 'package:yea_nay/presentation/screens/profile/profile_page.dart';
 import 'package:yea_nay/presentation/screens/splash/splash_screen.dart';
-import '../screens/main_page.dart';
+import '../screens/main_screen.dart';
 import '../controllers/auth_controller.dart';
 import '../screens/auth/login_screen.dart';
 
@@ -17,5 +18,7 @@ class RoutePage {
     GetPage(name: MainScreen.routeName, page: () => const MainScreen(), binding: MainBinding()),
 
     GetPage(name: CreatePostScreen.routeName, page: () => const CreatePostScreen()),
+
+    GetPage(name: ProfileScreen.routeName, page: () => const ProfileScreen()),
   ];
 }
